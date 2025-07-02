@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Guess the Number</title>
+  <style>
+    body {
+      margin: 0;
+      background-color: #2f2f2f;
+      color: white;
+      font-family: Arial, sans-serif;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+
+    .container {
+      background: #444;
+      padding: 2rem;
+      border-radius: 12px;
+      text-align: center;
+      width: 300px;
+    }
+
+    input[type="number"] {
+      padding: 0.5rem;
+      font-size: 1rem;
+      margin-top: 1rem;
+      width: 100%;
+      border: none;
+      border-radius: 6px;
+    }
+
+    button {
+      margin-top: 1rem;
+      padding: 0.5rem 1rem;
+      font-size: 1rem;
+      border: none;
+      border-radius: 6px;
+      background-color: #666;
+      color: white;
+      cursor: pointer;
+    }
+
+    .guesses {
+      margin-top: 1rem;
+      color: #ccc;
+      font-size: 0.9rem;
+    }
+
+    .success {
+      color: lightgreen;
+      font-weight: bold;
+      margin-top: 1rem;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Guess the Number</h1>
+    <input type="number" id="guessInput" placeholder="Guess a number"  />
+    <button onclick="handleGuess()">Submit</button>
+    <div class="guesses" id="guessList"></div>
+    <div class="success" id="successMsg"></div>
+  </div>
+
+  <script>
+    function singledigit(timeStr) {
+      const digits = timeStr.replace(/[^0-9]/g, '').split('').map(Number);
+      let sum = digits.reduce((a, b) => a + b, 0);
+
+      const random = Math.floor(Math.random() * 100); // 0–99
+      sum += random;
+
+      while (sum >= 100) {
+        sum = sum.toString().split('').reduce((a, b) => a + +b, 0);
+      }
+
+      return sum;
+    }
+
+
+    const currentTime = new Date().toTimeString().slice(0, 5);
+    const targetNumber = singledigit(currentTime);
+
+    let attempts = 0;
+    const wrongGuesses = [];
+
+    function handleGuess() {
+      const input = document.getElementById("guessInput");
+      const guess = parseInt(input.value, 10);
+      const successMsg = document.getElementById("successMsg");
+      const guessList = document.getElementById("guessList");
+
+      if (isNaN(guess)) return;
+
+      attempts++;
+
+      if (guess === targetNumber) {
+        successMsg.textContent = `🎉 Congratulations! You guessed it in ${attempts} attempts.`;
+        guessList.textContent = '';
+      } else {
+        wrongGuesses.push(guess);
+        guessList.textContent = `Wrong guesses: ${wrongGuesses.join(', ')},\n guess ${Math.abs(guess-targetNumber) > 10 ? "too " : ""} ${guess - targetNumber > 0 ? "High" : "Low"}`;
+        successMsg.textContent = '';
+      }
+
+      input.value = '';
+    }
+
+    document.addEventListener("keydown", (e) => {
+      const input = document.getElementById("guessInput");
+
+      if (e.key === "Enter") {
+        handleGuess();
+      } else if (/^[0-9]$/.test(e.key)) {
+        input.focus();
+      } else if (/^[a-zA-Z]$/.test(e.key)) {
+        alert("Please press a number key.");
+      }
+    });
+
+  </script>
+</body>
+</html>
