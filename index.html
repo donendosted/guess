@@ -102,7 +102,7 @@
         guessList.textContent = '';
       } else {
         wrongGuesses.push(guess);
-        guessList.textContent = `Wrong guesses: ${wrongGuesses.join(', ')},\n guess ${Math.abs(guess-targetNumber) > 10 ? "too " : ""} ${guess - targetNumber > 0 ? "High" : "Low"}`;
+        guessList.textContent = `Wrong guesses: ${wrongGuesses.join(', ')},\n Guess ${Math.abs(guess-targetNumber) > 10 ? "much  " : "lil "} ${guess - targetNumber > 0 ? "Higher" : "Lower"}`;
         successMsg.textContent = '';
       }
 
